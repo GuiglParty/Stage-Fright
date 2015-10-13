@@ -1,5 +1,5 @@
-# Stage-Fright
-Game Jam Fall 2015 Project
+# Stage Fright
+Game Jam Fall 2015 Project by David Deschamps, Joseph Chouinard, Were Diggle and Eric Hardy
 
 Amnesia-style first person horror game controlled by playing the piano.
 
