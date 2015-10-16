@@ -1,5 +1,5 @@
 # Stage Fright
-Game Jam Fall 2015 Project by David Deschamps, Joseph Chouinard, Were Diggle, Eric Hardy and Daniel Oxman
+Game Jam Fall 2015 Project by Guigl Party
 
 Amnesia-style first person horror game controlled by playing the piano.
 
@@ -28,11 +28,11 @@ Brainstormy ideas go here.
 
 
 *Graphics*
--ps1 graphics courtesy of keijiro
--might mean our wall meshes will need a few bumps to make sure we get that weird vertex shaking
+- ps1 graphics courtesy of keijiro
+- might mean our wall meshes will need a few bumps to make sure we get that weird vertex shaking
 
 - also have a few different keijiro glitch things to use:
-	scan line jitter, color drift, vertical jump, horizontal shake, block damage
-	use these when the player sees the monster, to further obscure it?
-	or on other triggers for spooky moments
+	- scan line jitter, color drift, vertical jump, horizontal shake, block damage
+	- use these when the player sees the monster, to further obscure it?
+	- or on other triggers for spooky moments
 	
