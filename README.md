@@ -32,7 +32,7 @@ Brainstormy ideas go here.
 - might mean our wall meshes will need a few bumps to make sure we get that weird vertex shaking
 
 - also have a few different keijiro glitch things to use:
-	scan line jitter, color drift, vertical jump, horizontal shake, block damage
-	use these when the player sees the monster, to further obscure it?
-	or on other triggers for spooky moments
+	- scan line jitter, color drift, vertical jump, horizontal shake, block damage
+	- use these when the player sees the monster, to further obscure it?
+	- or on other triggers for spooky moments
 	
