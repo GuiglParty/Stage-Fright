@@ -28,8 +28,8 @@ Brainstormy ideas go here.
 
 
 *Graphics*
--ps1 graphics courtesy of keijiro
--might mean our wall meshes will need a few bumps to make sure we get that weird vertex shaking
+- ps1 graphics courtesy of keijiro
+- might mean our wall meshes will need a few bumps to make sure we get that weird vertex shaking
 
 - also have a few different keijiro glitch things to use:
 	scan line jitter, color drift, vertical jump, horizontal shake, block damage
