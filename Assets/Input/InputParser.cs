@@ -71,15 +71,15 @@ public class InputParser : MonoBehaviour
 
                 if (rootDifference < 0)
                 {
-                    playerScript.TurnLeft(); // TODO(joseph)
+                    //playerScript.TurnLeft(); // TODO(joseph)
                 }
                 else if (rootDifference > 0)
                 {
-                    playerScript.TurnRight(); // TODO(joseph)
+                    //playerScript.TurnRight(); // TODO(joseph)
                 }
                 else
                 {
-                    playerScript.MoveForward(timeDelta, avgVelocity); // TODO(joseph)
+                    playerScript.moveForward(timeDelta, avgVelocity);
                 }
 
                 _previousStepTime = Time.time;
