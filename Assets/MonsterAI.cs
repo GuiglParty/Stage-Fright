@@ -5,6 +5,7 @@ public class MonsterAI : MonoBehaviour {
 
 	public float teleportRange;
 	public float acceleration;
+	public float deceleration;
 	public float startSpeed;
 	public float maxSpeed;
 	public GameObject prey;
@@ -15,7 +16,7 @@ public class MonsterAI : MonoBehaviour {
 	private RaycastHit sightLineHit;
 	private Ray sightLine;
 	private float actualSpeed;
-	private bool canSeePrey;
+	public bool canSeePrey;
 	private Vector3 preyHeading;
 
 
@@ -26,44 +27,36 @@ public class MonsterAI : MonoBehaviour {
 		
 	}
 
-	void OnTriggerStay(Collider other) 
+	public void changeHeadingDirectional(GameObject waypointLeft, GameObject waypointRight) 
 	{
-		if (other.tag == "directional") {
+		Vector3 headingLeft = (waypointLeft.transform.position - transform.position).normalized;
+		Vector3 headingRight = (waypointRight.transform.position - transform.position).normalized;
 
-			GameObject waypointLeft = other.GetComponent<WaypointTriggerDirectional> ().nextWaypointLeft;
-			GameObject waypointRight = other.GetComponent<WaypointTriggerDirectional> ().nextWaypointRight;
-			Vector3 headingLeft = (waypointLeft.transform.position - transform.position).normalized;
-			Vector3 headingRight = (waypointRight.transform.position - transform.position).normalized;
-
-			if (canSeePrey)
+		if (canSeePrey)
+		{
+			float differenceLeft = (preyHeading - headingLeft).magnitude;
+			float differenceRight = (preyHeading - headingRight).magnitude;
+			if (differenceLeft < differenceRight)
 			{
-				float differenceLeft = (preyHeading - headingLeft).magnitude;
-				float differenceRight = (preyHeading - headingRight).magnitude;
-				if (differenceLeft < differenceRight)
-				{
-					heading = headingLeft;
-				}
-				else 
-				{
-					heading = headingRight;
-				}
+				heading = headingLeft;
 			}
 			else 
 			{
-				int takeLeft = Random.Range (0, 2);
-				if (takeLeft == 1) heading = headingLeft;
-				else heading = headingRight;
+				heading = headingRight;
 			}
-		} 
-		else if (other.tag == "linear") 
-		{
-			GameObject waypoint = other.GetComponent<WaypointTriggerLinear> ().nextWaypoint;
-			heading = (waypoint.transform.position - transform.position).normalized;
-		} 
-		else if (other.tag == "Player") 
-		{
-			//TODO: bad things happen to player
 		}
+		else 
+		{
+			int takeLeft = Random.Range (0, 2);
+			if (takeLeft == 1) heading = headingLeft;
+			else heading = headingRight;
+		}
+	
+	}
+
+	public void changeHeadingLinear(GameObject waypoint)
+	{
+		heading = (waypoint.transform.position - transform.position).normalized;
 	}
 
 	// Update is called once per frame
@@ -94,7 +87,7 @@ public class MonsterAI : MonoBehaviour {
 				else {
 					//slow down until it reaches default speed
 					canSeePrey = false;
-					actualSpeed = Mathf.Max(startSpeed, actualSpeed - acceleration * Time.deltaTime);
+					actualSpeed = Mathf.Max(startSpeed, actualSpeed - deceleration * Time.deltaTime);
 					transform.Translate(heading * actualSpeed * Time.deltaTime);
 				}
 			}
