@@ -7,6 +7,8 @@ public class InputParser : MonoBehaviour
 {
     public GameObject playerObject;
     private Player playerScript;
+    public GameObject audioObject;
+    private UnitySynthTest audioScript;
 
     private int _previousStepRoot;
     private Note _newStepRoot;
@@ -35,11 +37,26 @@ public class InputParser : MonoBehaviour
     void Start()
     {
         playerScript = playerObject.GetComponent<Player>();
+        audioScript = audioObject.GetComponent<UnitySynthTest>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // play sounds
+        for (int i = 0; i < 128; i++)
+        {
+            if (MidiMaster.GetKeyDown(i))
+            {
+                print("key " + i + " pressed");
+                audioScript.PlayNote(i, MidiMaster.GetKey(i));
+            }
+            else if (MidiMaster.GetKeyUp(i))
+            {
+                audioScript.StopNote(i);
+            }
+        }
+
         List<Note> newStingNotes = new List<Note>();
 
         // sting notes
