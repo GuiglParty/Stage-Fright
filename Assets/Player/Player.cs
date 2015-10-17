@@ -6,8 +6,11 @@ public class Player : MonoBehaviour {
     public float walkSpeed = 5f; // Units moved per second, when running at full speed
 	public float turnSpeed = 0.5f; // How quickly the view will spin when walking normally
 	public GameObject nextWaypoint; // the next position that the player will move towards when walking
-	
-	GameObject _lastWaypoint; // the previous position that the player moved towards
+
+    public Camera firstPerson; // Used to navigate game
+    public Camera birdsEye; // Used when viewing map
+
+    GameObject _lastWaypoint; // the previous position that the player moved towards
 	
 	PlayerState _ps;
 	PlayerWalkState _pws;
@@ -21,13 +24,33 @@ public class Player : MonoBehaviour {
 		_stepForce = 1.0f;
 		
 		_lastWaypoint = nextWaypoint;
+
+        firstPerson.enabled = true;
+        birdsEye.enabled = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown("Fire1")) {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            firstPerson.enabled = !firstPerson.enabled;
+            birdsEye.enabled = !birdsEye.enabled;
+        }
+
+		if (Input.GetButtonDown("Fire1") && firstPerson.enabled) { // Move only when not viewing map
 			_stepForce = 1.0f;
+			_pws = PlayerWalkState.forward;
 		}
+	
+		if (Input.GetAxis("Horizontal") < 0.0f) {
+			_pws = PlayerWalkState.left;
+		}
+		
+		if (Input.GetAxis("Horizontal") > 0.0f) {
+			_pws = PlayerWalkState.right;
+		}
+
+        
 	
 		// Check what type of action the player object is currently undertaking
 		if( _ps == PlayerState.walking && nextWaypoint != null) {
@@ -39,7 +62,7 @@ public class Player : MonoBehaviour {
 			// Check if we have received any input to move
 			if( _pws == PlayerWalkState.forward ) {
 				// moving forward, move towards nextWaypoint
-				if( distance > 0.5 ) {
+				if( distance > 2 ) {
 					this.GetComponent<CharacterController>().Move(direction * walkSpeed * _stepForce * Time.deltaTime);
 				}
 				this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.time * turnSpeed);
