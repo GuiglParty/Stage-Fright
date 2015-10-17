@@ -18,7 +18,7 @@ public class WaypointTriggerLinear : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) {
         //check if the colliding object is the player
-		if (other.tag == "Player" /*&& other.GetComponent<Player>().nextWaypoint == this.transform.parent.gameObject*/) {
+		if (other.tag == "Player" && nextWaypoint != null) {
 
 			other.GetComponent<Player>().setWaypoint(nextWaypoint);
 			this.GetComponent<Collider>().enabled = false; // make sure we don't continually hit this trigger
