@@ -4,19 +4,20 @@ using System.Collections;
 public class WaypointTriggerDirectional : MonoBehaviour {
 	public GameObject nextWaypointLeft;
 	public GameObject nextWaypointRight;
+	public GameObject nextWaypointMiddle;
     public GameObject mapShadow;
 	public bool changeMonsterHeading;
 
-
+	bool _setMiddleWaypoint = false;
+	
     // Use this for initialization
     void Start () {
 		this.GetComponent<Collider>().enabled = true;
 		changeMonsterHeading = true;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+	void onEnable() {
+		_setMiddleWaypoint = false;
 	}
 	
 	void OnTriggerStay(Collider other) {
@@ -25,16 +26,29 @@ public class WaypointTriggerDirectional : MonoBehaviour {
 		if (other.tag == "Player" /*&& other.GetComponent<Player>().nextWaypoint == this.transform.parent.gameObject*/) {
 
 			if (other.GetComponent<Player> ().getWalkState () == PlayerWalkState.left && nextWaypointLeft != null) {
-				other.GetComponent<Player> ().setWaypoint (nextWaypointLeft);
+				if(_setMiddleWaypoint == false) {
+					other.GetComponent<Player> ().setWaypoint (nextWaypointLeft);
+				} else {
+					other.GetComponent<Player> ().setWaypointFront (nextWaypointLeft);
+				}
 				this.GetComponent<Collider> ().enabled = false;
+				mapShadow.GetComponent<Renderer> ().enabled = false; // Hide the shadow on the map view
+			} else 
+			if (other.GetComponent<Player> ().getWalkState () == PlayerWalkState.right && nextWaypointRight != null) {
+				if(_setMiddleWaypoint == false) {
+					other.GetComponent<Player> ().setWaypoint (nextWaypointRight);
+				} else {
+					other.GetComponent<Player> ().setWaypointFront (nextWaypointRight);
+				}
+				this.GetComponent<Collider> ().enabled = false;
+				mapShadow.GetComponent<Renderer> ().enabled = false; // Hide the shadow on the map view
+			} else 
+			if (_setMiddleWaypoint == false && other.GetComponent<Player> ().getWalkState () == PlayerWalkState.right && nextWaypointMiddle != null){
+				other.GetComponent<Player> ().setWaypoint (nextWaypointMiddle);
+				_setMiddleWaypoint = true;
 				mapShadow.GetComponent<Renderer> ().enabled = false; // Hide the shadow on the map view
 			}
 			
-			if (other.GetComponent<Player> ().getWalkState () == PlayerWalkState.right && nextWaypointRight != null) {
-				other.GetComponent<Player> ().setWaypoint (nextWaypointRight);
-				this.GetComponent<Collider> ().enabled = false;
-				mapShadow.GetComponent<Renderer> ().enabled = false; // Hide the shadow on the map view
-			}
 		} else if (other.tag == "Monster" && changeMonsterHeading) {
 			other.GetComponent<MonsterAI> ().changeHeadingDirectional (nextWaypointLeft, nextWaypointRight);
 			changeMonsterHeading = false;
