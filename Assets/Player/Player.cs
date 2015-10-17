@@ -91,6 +91,15 @@ public class Player : MonoBehaviour {
 
     }
 	
+	public void turnLeft() {
+		_pws = PlayerWalkState.left;
+	}
+	
+	public void turnRight() {
+		_pws = PlayerWalkState.right;
+		
+	}
+	
 	// tell the player which position to move to next
 	public void setWaypoint( GameObject Waypoint ) {
 		_lastWaypoint = nextWaypoint;
