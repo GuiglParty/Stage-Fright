@@ -12,12 +12,20 @@ public class MonsterAI : MonoBehaviour {
 	private RaycastHit sightLineHit;
 	private Ray sightLine;
 	private float actualSpeed;
+	//this should always be a valid heading between waypoints.
+	//hitting a 
+	public Vector3 heading;
 
 	// Use this for initialization
 	void Start () {
-	
+		
 	}
-	
+
+	void OnTriggerStay(Collider other) 
+	{
+
+	}
+
 	// Update is called once per frame
 	void Update () 
 	{
@@ -35,7 +43,7 @@ public class MonsterAI : MonoBehaviour {
 				if (sightLineHit.transform == prey.transform) 
 				{
 					//Debug.Log("has line of sight to prey");
-					Vector3 heading = preyDirection / preyDistance;
+					heading = preyDirection.normalized;
 					//speed up to max speed
 					actualSpeed = Mathf.Min(maxSpeed, actualSpeed + acceleration * Time.deltaTime);
 					transform.Translate(heading * actualSpeed * Time.deltaTime);
@@ -45,7 +53,7 @@ public class MonsterAI : MonoBehaviour {
 				else {
 					//slow down until it reaches default speed
 					actualSpeed = Mathf.Max(startSpeed, actualSpeed - acceleration * Time.deltaTime);
-					//TODO: move along the points
+					transform.Translate(heading * actualSpeed * Time.deltaTime);
 				}
 			}
 		} 
