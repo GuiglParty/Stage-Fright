@@ -24,13 +24,13 @@ public class WaypointTriggerDirectional : MonoBehaviour {
         //check if the colliding object is the player
 		if (other.tag == "Player" /*&& other.GetComponent<Player>().nextWaypoint == this.transform.parent.gameObject*/) {
 
-			if (other.GetComponent<Player> ().getWalkState () == PlayerWalkState.left) {
+			if (other.GetComponent<Player> ().getWalkState () == PlayerWalkState.left && nextWaypointLeft != null) {
 				other.GetComponent<Player> ().setWaypoint (nextWaypointLeft);
 				this.GetComponent<Collider> ().enabled = false;
 				mapShadow.GetComponent<Renderer> ().enabled = false; // Hide the shadow on the map view
 			}
 			
-			if (other.GetComponent<Player> ().getWalkState () == PlayerWalkState.right) {
+			if (other.GetComponent<Player> ().getWalkState () == PlayerWalkState.right && nextWaypointRight != null) {
 				other.GetComponent<Player> ().setWaypoint (nextWaypointRight);
 				this.GetComponent<Collider> ().enabled = false;
 				mapShadow.GetComponent<Renderer> ().enabled = false; // Hide the shadow on the map view
