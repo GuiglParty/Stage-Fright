@@ -38,6 +38,7 @@ public class InputParser : MonoBehaviour
     {
         playerScript = playerObject.GetComponent<Player>();
         audioScript = audioObject.GetComponent<UnitySynthTest>();
+        _chordToComplete = new List<int>();
     }
 
     // Update is called once per frame
