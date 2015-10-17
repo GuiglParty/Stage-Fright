@@ -62,7 +62,7 @@ public class Player : MonoBehaviour {
 			// Check if we have received any input to move
 			if( _pws == PlayerWalkState.forward ) {
 				// moving forward, move towards nextWaypoint
-				if( distance > 0.5 ) {
+				if( distance > 2 ) {
 					this.GetComponent<CharacterController>().Move(direction * walkSpeed * _stepForce * Time.deltaTime);
 				}
 				this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.time * turnSpeed);

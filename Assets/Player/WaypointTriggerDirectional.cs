@@ -4,10 +4,11 @@ using System.Collections;
 public class WaypointTriggerDirectional : MonoBehaviour {
 	public GameObject nextWaypointLeft;
 	public GameObject nextWaypointRight;
-	
-	
-	// Use this for initialization
-	void Start () {
+    public GameObject mapShadow;
+
+
+    // Use this for initialization
+    void Start () {
 		this.GetComponent<Collider>().enabled = true;
 		
 	}
@@ -24,12 +25,14 @@ public class WaypointTriggerDirectional : MonoBehaviour {
 			if(other.GetComponent<Player>().getWalkState() == PlayerWalkState.left) {
 				other.GetComponent<Player>().setWaypoint(nextWaypointLeft);
 				this.GetComponent<Collider>().enabled = false;
-			}
+                mapShadow.GetComponent<Renderer>().enabled = false; // Hide the shadow on the map view
+            }
 			
 			if(other.GetComponent<Player>().getWalkState() == PlayerWalkState.right) {
 				other.GetComponent<Player>().setWaypoint(nextWaypointRight);
 				this.GetComponent<Collider>().enabled = false;
-			}
+                mapShadow.GetComponent<Renderer>().enabled = false; // Hide the shadow on the map view
+            }
 		}
     }
 }
