@@ -49,7 +49,7 @@ public class InputParser : MonoBehaviour
         {
             if (MidiMaster.GetKeyDown(i))
             {
-                print("key " + i + " pressed");
+                //print("key " + i + " pressed");
                 audioScript.PlayNote(i, MidiMaster.GetKey(i));
             }
             else if (MidiMaster.GetKeyUp(i))
@@ -153,17 +153,17 @@ public class InputParser : MonoBehaviour
 
                     if (rootDifference < 0)
                     {
-                        print("turn left");
+                        //print("turn left");
                         playerScript.turnLeft();
                     }
                     else if (rootDifference > 0)
                     {
-                        print("turn right");
+                        //print("turn right");
                         playerScript.turnRight();
                     }
                     else
                     {
-                        print("move forward");
+                        //print("move forward");
                         playerScript.moveForward(timeDelta, avgVelocity);
                     }
 
