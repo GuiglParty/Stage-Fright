@@ -30,7 +30,7 @@ public class Player : MonoBehaviour {
 		}
 	
 		// Check what type of action the player object is currently undertaking
-		if( _ps == PlayerState.walking ) {
+		if( _ps == PlayerState.walking && nextWaypoint != null) {
 		
 			var heading = nextWaypoint.transform.position - this.transform.position;
 			var distance = heading.magnitude;
@@ -69,6 +69,27 @@ public class Player : MonoBehaviour {
 			_stepForce = stepForce;
 		}
 	}
+
+    public void turnLeft()
+    {
+
+    }
+
+    public void turnRight()
+    {
+
+    }
+
+    public void lookAround()
+    {
+
+    }
+
+    // 180 turn
+    public void turnAround()
+    {
+
+    }
 	
 	// tell the player which position to move to next
 	public void setWaypoint( GameObject Waypoint ) {

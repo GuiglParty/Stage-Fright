@@ -14,14 +14,14 @@ public class InputParser : MonoBehaviour
 
     float _previousStepTime;
 
-    int midiMinKey = 0;
-    int midiMaxKey = 127;
+    // midi min = 0
+    // midi max = 127
 
     int bottomOctaveStart = 36;
     int bottomOctaveEnd = 48;
 
-    int topOctaveStart = 100; // TODO: Determine actual value
-    int topOctaveEnd = 112; // TODO: Determine actual value
+    int topOctaveStart = 84; // TODO: Determine actual value
+    int topOctaveEnd = 96; // TODO: Determine actual value
 
     // Use this for initialization
     void Start()
@@ -32,6 +32,37 @@ public class InputParser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        List<Note> newStingNotes = new List<Note>();
+
+        // sting notes
+        for (int i = topOctaveStart; i <= topOctaveEnd; i++)
+        {
+            if (MidiMaster.GetKeyDown(i))
+            {
+                newStingNotes.Add(new Note
+                {
+                    Value = i,
+                    Velocity = MidiMaster.GetKey(i)
+                });
+            }
+        }
+
+        List<Note> newLookNotes = new List<Note>();
+
+        // look notes
+        for (int i = bottomOctaveStart; i < bottomOctaveEnd; i++)
+        {
+            if (MidiMaster.GetKey(i) > 0) // should repeatedly trigger on hold
+            {
+                newLookNotes.Add(new Note
+                {
+                    Value = i,
+                    Velocity = MidiMaster.GetKey(i)
+                });
+            }
+        }
+
+
         List<Note> newWalkingNotes = new List<Note>();
 
         // walking notes
@@ -47,6 +78,19 @@ public class InputParser : MonoBehaviour
             }
         }
         
+        // process notes
+
+        // 180 sting takes priority over looking
+        if (newStingNotes.Count > 3)
+        {
+            playerScript.turnAround();
+        }
+        else if (newLookNotes.Count > 3)
+        {
+            playerScript.lookAround();
+        }
+
+        // can keep running while looking/turning around
         if (newWalkingNotes.Count == 1)
         {
             _newStepRoot = newWalkingNotes[0];
@@ -71,14 +115,17 @@ public class InputParser : MonoBehaviour
 
                 if (rootDifference < 0)
                 {
-                    //playerScript.TurnLeft(); // TODO(joseph)
+                    print("turn left");
+                    playerScript.turnLeft();
                 }
                 else if (rootDifference > 0)
                 {
-                    //playerScript.TurnRight(); // TODO(joseph)
+                    print("turn right");
+                    playerScript.turnRight();
                 }
                 else
                 {
+                    print("move forward");
                     playerScript.moveForward(timeDelta, avgVelocity);
                 }
 
