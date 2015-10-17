@@ -19,7 +19,7 @@ public class AudioPlayer : MonoBehaviour {
     {
         if (note >= 0 && note < 128)
         {
-            print("playing " + note);
+            //print("playing " + note);
             audioSource.pitch = Mathf.Pow(2, (float)((note) / 12.0));
             audioSource.volume = volume;
             audioSource.Play();
