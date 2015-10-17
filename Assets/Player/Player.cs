@@ -39,6 +39,15 @@ public class Player : MonoBehaviour {
 
 		if (Input.GetButtonDown("Fire1") && firstPerson.enabled) { // Move only when not viewing map
 			_stepForce = 1.0f;
+			_pws = PlayerWalkState.forward;
+		}
+	
+		if (Input.GetAxis("Horizontal") < 0.0f) {
+			_pws = PlayerWalkState.left;
+		}
+		
+		if (Input.GetAxis("Horizontal") > 0.0f) {
+			_pws = PlayerWalkState.right;
 		}
 
         
