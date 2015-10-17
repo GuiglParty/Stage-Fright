@@ -6,8 +6,11 @@ public class Player : MonoBehaviour {
     public float walkSpeed = 5f; // Units moved per second, when running at full speed
 	public float turnSpeed = 0.5f; // How quickly the view will spin when walking normally
 	public GameObject nextWaypoint; // the next position that the player will move towards when walking
-	
-	GameObject _lastWaypoint; // the previous position that the player moved towards
+
+    public Camera firstPerson; // Used to navigate game
+    public Camera birdsEye; // Used when viewing map
+
+    GameObject _lastWaypoint; // the previous position that the player moved towards
 	
 	PlayerState _ps;
 	PlayerWalkState _pws;
@@ -21,13 +24,24 @@ public class Player : MonoBehaviour {
 		_stepForce = 1.0f;
 		
 		_lastWaypoint = nextWaypoint;
+
+        firstPerson.enabled = true;
+        birdsEye.enabled = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown("Fire1")) {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            firstPerson.enabled = !firstPerson.enabled;
+            birdsEye.enabled = !birdsEye.enabled;
+        }
+
+		if (Input.GetButtonDown("Fire1") && firstPerson.enabled) { // Move only when not viewing map
 			_stepForce = 1.0f;
 		}
+
+        
 	
 		// Check what type of action the player object is currently undertaking
 		if( _ps == PlayerState.walking && nextWaypoint != null) {
