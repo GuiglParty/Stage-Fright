@@ -17,10 +17,17 @@ public class WaypointTriggerLinear : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) {
         //check if the colliding object is the player
-		if(other.tag == "Player" /*&& other.GetComponent<Player>().nextWaypoint == this.transform.parent.gameObject*/ ) {
+		if (other.tag == "Player" /*&& other.GetComponent<Player>().nextWaypoint == this.transform.parent.gameObject*/) {
 			
-			other.GetComponent<Player>().setWaypoint(nextWaypoint);
-			this.GetComponent<Collider>().enabled = false; // make sure we don't continually hit this trigger
-		}
+			other.GetComponent<Player> ().setWaypoint (nextWaypoint);
+			this.GetComponent<Collider> ().enabled = false; // make sure we don't continually hit this trigger
+		} 
     }
+
+	void OnTriggerStay(Collider other) {
+		Debug.Log("waypoint on trigger stay");
+		if (other.tag == "Monster") {
+			other.GetComponent<MonsterAI> ().changeHeadingLinear(nextWaypoint);
+		}
+	}
 }
