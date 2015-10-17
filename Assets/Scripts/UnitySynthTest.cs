@@ -122,34 +122,6 @@ public class UnitySynthTest : MonoBehaviour
 		
 	}
 	
-	// OnGUI is called for rendering and handling
-	// GUI events.
-	void OnGUI ()
-	{
-		// Make a background box
-		GUILayout.BeginArea (new Rect (Screen.width / 2 - 75, Screen.height / 2 - 50, 150, 300));
-		
-		
-		if (GUILayout.Button ("Play Song")) {
-			midiSequencer.Play ();
-		}
-		if (GUILayout.Button ("Stop Song")) {
-			midiSequencer.Stop (true);
-		}		
-		GUILayout.Label("Play keys AWSEDFTGYHJK");
-		
-		GUILayout.Box("Instrument: " + Mathf.Round(midiInstrument));
-		midiInstrument = (int)GUILayout.HorizontalSlider (midiInstrument, 0.0f, maxSliderValue);
-		GUILayout.Box("Volume: " + Mathf.Round(midiNoteVolume));
-		midiNoteVolume = (int)GUILayout.HorizontalSlider (midiNoteVolume, 0.0f, maxSliderValue);
-		// End the Groups and Area	
-		GUILayout.EndArea ();
-		
-        Event e = Event.current;
-        if (e.isKey)
-            Debug.Log("Detected key code: " + e.keyCode);		
-	}
-	
 	// This function is called when the object
 	// becomes enabled and active.
 	void OnEnable ()
