@@ -27,6 +27,15 @@ public class Player : MonoBehaviour {
 	void Update () {
 		if (Input.GetButtonDown("Fire1")) {
 			_stepForce = 1.0f;
+			_pws = PlayerWalkState.forward;
+		}
+	
+		if (Input.GetAxis("Horizontal") < 0.0f) {
+			_pws = PlayerWalkState.left;
+		}
+		
+		if (Input.GetAxis("Horizontal") > 0.0f) {
+			_pws = PlayerWalkState.right;
 		}
 	
 		// Check what type of action the player object is currently undertaking
