@@ -8,11 +8,11 @@ public class InputParser : MonoBehaviour
     public GameObject playerObject;
     private Player playerScript;
 
-    private int previousStepRoot;
-    private Note newStepRoot;
-    private List<int> chordToComplete;
+    private int _previousStepRoot;
+    private Note _newStepRoot;
+    private List<int> _chordToComplete;
 
-    float previousStepTime;
+    float _previousStepTime;
 
     int midiMinKey = 0;
     int midiMaxKey = 127;
@@ -49,8 +49,8 @@ public class InputParser : MonoBehaviour
         
         if (newWalkingNotes.Count == 1)
         {
-            newStepRoot = newWalkingNotes[0];
-            chordToComplete = new List<int>
+            _newStepRoot = newWalkingNotes[0];
+            _chordToComplete = new List<int>
             {
                 // construct diminished triad
                 newWalkingNotes[0].Value + 3,
@@ -59,15 +59,15 @@ public class InputParser : MonoBehaviour
         }
         else if (newWalkingNotes.Count == 2)
         {
-            if (chordToComplete.Find(note => note == newWalkingNotes[0].Value) != 0 &&
-                chordToComplete.Find(note => note == newWalkingNotes[1].Value) != 0)
+            if (_chordToComplete.Find(note => note == newWalkingNotes[0].Value) != 0 &&
+                _chordToComplete.Find(note => note == newWalkingNotes[1].Value) != 0)
             {
                 // they've completed the chord, take a step
 
-                float avgVelocity = (newStepRoot.Velocity + newWalkingNotes[0].Velocity + newWalkingNotes[1].Velocity) / 3;
-                float timeDelta = Time.time - previousStepTime;
+                float avgVelocity = (_newStepRoot.Velocity + newWalkingNotes[0].Velocity + newWalkingNotes[1].Velocity) / 3;
+                float timeDelta = Time.time - _previousStepTime;
 
-                int rootDifference = newStepRoot.Value - previousStepRoot;
+                int rootDifference = _newStepRoot.Value - _previousStepRoot;
 
                 if (rootDifference < 0)
                 {
@@ -82,9 +82,9 @@ public class InputParser : MonoBehaviour
                     playerScript.MoveForward(timeDelta, avgVelocity); // TODO(joseph)
                 }
 
-                previousStepTime = Time.time;
-                previousStepRoot = newStepRoot.Value;
-                chordToComplete.Clear();
+                _previousStepTime = Time.time;
+                _previousStepRoot = _newStepRoot.Value;
+                _chordToComplete.Clear();
             }
         }
     }
