@@ -1,0 +1,26 @@
+Tasks for Saturday:
+
+- monster ai, mov't, simple model
+	- related: figure out hiding, line of sight
+- player turning, nodes&paths
+- player looking around, 180 (inputs & actions)
+- make a basic map, with nodes&paths&walls
+	- related: think about map given to player
+- get a set of sounds to map to keys
+- trigger those sounds on key press
+	- need a script to play sounds while key held down
+- other sounds: near monster, near objectives, near turn, near hiding place
+	also: atmospheric noise, caught by monster
+- wall models, floor models, stair models, spooky tree models
+- camera animations for things like looking down, walking head bob, dying
+- the stairs question
+	just a case of input parsing requiring '-.'-. sounds
+
+- title screen, music, menus, input to start game
+- restart on death from checkpoints, win game on find things
+- persist some data across scenes for multiple levels
+- rudimentary saves
+
+- tutorial area, how to play chords
+
+- find out where to use glitch effects (low prio, when other things are done)
