@@ -40,7 +40,7 @@ public class Player : MonoBehaviour {
 			if( _pws == PlayerWalkState.forward ) {
 				// moving forward, move towards nextWaypoint
 				if( distance > 0.5 ) {
-					this.transform.position += direction * walkSpeed * _stepForce * Time.deltaTime;
+					this.GetComponent<CharacterController>().Move(direction * walkSpeed * _stepForce * Time.deltaTime);
 				}
 				this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.time * turnSpeed);
 				
@@ -70,16 +70,6 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-    public void turnLeft()
-    {
-
-    }
-
-    public void turnRight()
-    {
-
-    }
-
     public void lookAround()
     {
 
@@ -88,7 +78,8 @@ public class Player : MonoBehaviour {
     // 180 turn
     public void turnAround()
     {
-
+		GameObject temp = _lastWaypoint;
+		nextWaypoint = temp;
     }
 	
 	public void turnLeft() {
