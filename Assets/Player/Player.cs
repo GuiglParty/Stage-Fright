@@ -70,16 +70,6 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-    public void turnLeft()
-    {
-
-    }
-
-    public void turnRight()
-    {
-
-    }
-
     public void lookAround()
     {
 

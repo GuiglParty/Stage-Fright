@@ -14,6 +14,9 @@ public class InputParser : MonoBehaviour
 
     float _previousStepTime;
 
+    private bool _lastFrameWasRoot = false;
+    private bool _lastInputWasChordComplete = false;
+
     // midi min = 0
     // midi max = 127
 
@@ -22,6 +25,11 @@ public class InputParser : MonoBehaviour
 
     int topOctaveStart = 84; // TODO: Determine actual value
     int topOctaveEnd = 96; // TODO: Determine actual value
+
+    void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
 
     // Use this for initialization
     void Start()
@@ -37,7 +45,7 @@ public class InputParser : MonoBehaviour
         // sting notes
         for (int i = topOctaveStart; i <= topOctaveEnd; i++)
         {
-            if (MidiMaster.GetKeyDown(i))
+            if (MidiMaster.GetKey(i) > 0)
             {
                 newStingNotes.Add(new Note
                 {
@@ -68,7 +76,7 @@ public class InputParser : MonoBehaviour
         // walking notes
         for (int i = bottomOctaveEnd; i < topOctaveStart; i++)
         {
-            if (MidiMaster.GetKeyDown(i))
+            if (MidiMaster.GetKey(i) > 0)
             {
                 newWalkingNotes.Add(new Note
                 {
@@ -93,45 +101,59 @@ public class InputParser : MonoBehaviour
         // can keep running while looking/turning around
         if (newWalkingNotes.Count == 1)
         {
-            _newStepRoot = newWalkingNotes[0];
-            _chordToComplete = new List<int>
+            if (_lastFrameWasRoot)
             {
-                // construct diminished triad
-                newWalkingNotes[0].Value + 3,
-                newWalkingNotes[0].Value + 6
-            };
+                // don't reset root just yet, wait a frame to see if they press two 
+                _lastFrameWasRoot = false;
+            }
+            else
+            {
+                _newStepRoot = newWalkingNotes[0];
+                _chordToComplete = new List<int>
+                {
+                    // construct diminished triad
+                    newWalkingNotes[0].Value + 3,
+                    newWalkingNotes[0].Value + 6
+                };
+                _lastFrameWasRoot = true;
+                _lastInputWasChordComplete = false;
+            }
         }
         else if (newWalkingNotes.Count == 2)
         {
-            if (_chordToComplete.Find(note => note == newWalkingNotes[0].Value) != 0 &&
-                _chordToComplete.Find(note => note == newWalkingNotes[1].Value) != 0)
+            if (!_lastInputWasChordComplete)
             {
-                // they've completed the chord, take a step
-
-                float avgVelocity = (_newStepRoot.Velocity + newWalkingNotes[0].Velocity + newWalkingNotes[1].Velocity) / 3;
-                float timeDelta = Time.time - _previousStepTime;
-
-                int rootDifference = _newStepRoot.Value - _previousStepRoot;
-
-                if (rootDifference < 0)
+                if (_chordToComplete.Find(note => note == newWalkingNotes[0].Value) != 0 &&
+                    _chordToComplete.Find(note => note == newWalkingNotes[1].Value) != 0)
                 {
-                    print("turn left");
-                    playerScript.turnLeft();
-                }
-                else if (rootDifference > 0)
-                {
-                    print("turn right");
-                    playerScript.turnRight();
-                }
-                else
-                {
-                    print("move forward");
-                    playerScript.moveForward(timeDelta, avgVelocity);
-                }
+                    // they've completed the chord, take a step
 
-                _previousStepTime = Time.time;
-                _previousStepRoot = _newStepRoot.Value;
-                _chordToComplete.Clear();
+                    float avgVelocity = (_newStepRoot.Velocity + newWalkingNotes[0].Velocity + newWalkingNotes[1].Velocity) / 3;
+                    float timeDelta = Time.time - _previousStepTime;
+
+                    int rootDifference = _newStepRoot.Value - _previousStepRoot;
+
+                    if (rootDifference < 0)
+                    {
+                        print("turn left");
+                        playerScript.turnLeft();
+                    }
+                    else if (rootDifference > 0)
+                    {
+                        print("turn right");
+                        playerScript.turnRight();
+                    }
+                    else
+                    {
+                        print("move forward");
+                        playerScript.moveForward(timeDelta, avgVelocity);
+                    }
+
+                    _previousStepTime = Time.time;
+                    _previousStepRoot = _newStepRoot.Value;
+                    _chordToComplete.Clear();
+                    _lastInputWasChordComplete = true;
+                }
             }
         }
     }
