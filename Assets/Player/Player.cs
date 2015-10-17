@@ -122,9 +122,12 @@ public class Player : MonoBehaviour {
 	
 	// tell the player which position to move to next
 	public void setWaypoint( GameObject Waypoint ) {
-		_lastWaypoint = nextWaypoint;
-		_intermediateWaypoint = nextWaypoint;
-		nextWaypoint = Waypoint;
+        if (Waypoint != nextWaypoint)
+        {
+            _lastWaypoint = nextWaypoint;
+            _intermediateWaypoint = nextWaypoint;
+            nextWaypoint = Waypoint;
+        }
 	}
 	
 	// change the next waypoint without changing the intermediate information
