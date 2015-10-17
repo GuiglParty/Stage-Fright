@@ -11,7 +11,7 @@ public class Player : MonoBehaviour {
     public Camera birdsEye; // Used when viewing map
 
     GameObject _lastWaypoint; // the previous position that the player moved towards
-	
+	GameObject _intermediateWaypoint; // used to make movement more smooth and consistant
 	PlayerState _ps;
 	PlayerWalkState _pws;
 	
@@ -24,6 +24,7 @@ public class Player : MonoBehaviour {
 		_stepForce = 1.0f;
 		
 		_lastWaypoint = nextWaypoint;
+		_intermediateWaypoint = null;
 
         firstPerson.enabled = true;
         birdsEye.enabled = false;
@@ -54,19 +55,24 @@ public class Player : MonoBehaviour {
 	
 		// Check what type of action the player object is currently undertaking
 		if( _ps == PlayerState.walking && nextWaypoint != null) {
-		
 			var heading = nextWaypoint.transform.position - this.transform.position;
 			var distance = heading.magnitude;
 			var direction = heading / distance;
+			if( _intermediateWaypoint != null ){
+				heading = _intermediateWaypoint.transform.position - this.transform.position;
+				distance = heading.magnitude;
+				direction = heading / distance;
+			}
 
 			// Check if we have received any input to move
 			if( _pws == PlayerWalkState.forward ) {
 				// moving forward, move towards nextWaypoint
-				if( distance > 2 ) {
+				if( distance > 1 ) {
 					this.GetComponent<CharacterController>().Move(direction * walkSpeed * _stepForce * Time.deltaTime);
+				} else if ( _intermediateWaypoint != null) {
+					_intermediateWaypoint = null;
 				}
-				this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.time * turnSpeed);
-				
+				this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), turnSpeed);
 				// reduce the _stepForce for the next frame
 				_stepForce = Mathf.Lerp(0.0f, _stepForce, 0.95f);
 			}
@@ -117,6 +123,7 @@ public class Player : MonoBehaviour {
 	// tell the player which position to move to next
 	public void setWaypoint( GameObject Waypoint ) {
 		_lastWaypoint = nextWaypoint;
+		_intermediateWaypoint = nextWaypoint;
 		nextWaypoint = Waypoint;
 	}
 }
