@@ -30,7 +30,7 @@ public class Player : MonoBehaviour {
 		}
 	
 		// Check what type of action the player object is currently undertaking
-		if( _ps == PlayerState.walking ) {
+		if( _ps == PlayerState.walking && nextWaypoint != null) {
 		
 			var heading = nextWaypoint.transform.position - this.transform.position;
 			var distance = heading.magnitude;
@@ -40,7 +40,7 @@ public class Player : MonoBehaviour {
 			if( _pws == PlayerWalkState.forward ) {
 				// moving forward, move towards nextWaypoint
 				if( distance > 0.5 ) {
-					this.transform.position += direction * walkSpeed * _stepForce * Time.deltaTime;
+					this.GetComponent<CharacterController>().Move(direction * walkSpeed * _stepForce * Time.deltaTime);
 				}
 				this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.time * turnSpeed);
 				
@@ -68,6 +68,27 @@ public class Player : MonoBehaviour {
 		if(_stepForce < stepForce ) {
 			_stepForce = stepForce;
 		}
+	}
+
+    public void lookAround()
+    {
+
+    }
+
+    // 180 turn
+    public void turnAround()
+    {
+		GameObject temp = _lastWaypoint;
+		nextWaypoint = temp;
+    }
+	
+	public void turnLeft() {
+		_pws = PlayerWalkState.left;
+	}
+	
+	public void turnRight() {
+		_pws = PlayerWalkState.right;
+		
 	}
 	
 	// tell the player which position to move to next
