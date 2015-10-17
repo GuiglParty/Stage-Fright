@@ -126,6 +126,11 @@ public class Player : MonoBehaviour {
 		_intermediateWaypoint = nextWaypoint;
 		nextWaypoint = Waypoint;
 	}
+	
+	// change the next waypoint without changing the intermediate information
+	public void setWaypointFront( GameObject Waypoint ) {
+		nextWaypoint = Waypoint;
+	}
 }
 
 // Used for determining the type of action the player object is taking
