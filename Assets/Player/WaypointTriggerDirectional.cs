@@ -50,7 +50,7 @@ public class WaypointTriggerDirectional : MonoBehaviour {
 			}
 			
 		} else if (other.tag == "Monster" && changeMonsterHeading) {
-			other.GetComponent<MonsterAI> ().changeHeadingDirectional (nextWaypointLeft, nextWaypointRight);
+			other.GetComponent<MonsterAI> ().changeHeadingDirectional (new GameObject[] { nextWaypointLeft, nextWaypointRight });
 			changeMonsterHeading = false;
 		}
     }

@@ -73,7 +73,7 @@ public class WaypointTriggerDave : MonoBehaviour {
         }
         else if (other.tag == "Monster" && changeMonsterHeading)
         {
-            other.GetComponent<MonsterAI>().changeHeadingDirectional(neighbours);
+            other.GetComponent<MonsterAI>().changeHeadingDirectional(neighbours.ToArray());
             changeMonsterHeading = false;
         }
     }
