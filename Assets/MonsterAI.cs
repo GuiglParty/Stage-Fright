@@ -112,6 +112,14 @@ public class MonsterAI : MonoBehaviour {
 		heading = newHeading.normalized;
 	}
 
+	void OnCollisionEnter(Collider other)
+	{
+		if (other.tag == "Player") 
+		{
+			//do scary death things
+		}
+	}
+
 	// Update is called once per frame
 	void Update () 
 	{
