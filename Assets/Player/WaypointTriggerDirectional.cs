@@ -43,7 +43,7 @@ public class WaypointTriggerDirectional : MonoBehaviour {
 				this.transform.parent.GetComponent<Waypoint>().disableTriggers();
 				mapShadow.GetComponent<Renderer> ().enabled = false; // Hide the shadow on the map view
 			} else 
-			if (_setMiddleWaypoint == false && other.GetComponent<Player> ().getWalkState () == PlayerWalkState.right && nextWaypointMiddle != null){
+			if (_setMiddleWaypoint == false && other.GetComponent<Player> ().getWalkState () == PlayerWalkState.forward && nextWaypointMiddle != null){
 				other.GetComponent<Player> ().setWaypoint (nextWaypointMiddle);
 				_setMiddleWaypoint = true;
 				mapShadow.GetComponent<Renderer> ().enabled = false; // Hide the shadow on the map view
