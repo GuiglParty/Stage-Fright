@@ -31,8 +31,6 @@ public class DoorTrigger : MonoBehaviour {
                 this.transform.Rotate(0f, -1f, 0f, Space.World);
             } else
             {
-                if (test > 0)
-                    UnityEditor.EditorUtility.DisplayDialog("TEST", "" + yRotate, "OK");
             }
         }
     }

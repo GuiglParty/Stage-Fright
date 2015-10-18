@@ -35,10 +35,20 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M)) // map view
         {
             firstPerson.enabled = !firstPerson.enabled;
             birdsEye.enabled = !birdsEye.enabled;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z)) // Turn around
+        {
+            turnAround();
+        }
+
+        if (Input.GetKeyDown(KeyCode.X)) // Hide
+        {
+            
         }
 
         if (Input.GetButtonDown("Jump"))
@@ -57,11 +67,11 @@ public class Player : MonoBehaviour {
 		}
 	
 		if (Input.GetAxis("Horizontal") < 0.0f) {
-			_pws = PlayerWalkState.left;
+            turnLeft();
 		}
 		
 		if (Input.GetAxis("Horizontal") > 0.0f) {
-			_pws = PlayerWalkState.right;
+            turnRight();
 		}
 
         if ( _ps == PlayerState.lookingAround && hiding )
@@ -158,7 +168,7 @@ public class Player : MonoBehaviour {
 
     public void stopLookingAround()
     {
-        if (_ps == PlayerState.lookingAround)
+        if (_ps == PlayerState.lookingAround && !Input.GetButton("Jump"))
         {
             _ps = PlayerState.walking;
         }
