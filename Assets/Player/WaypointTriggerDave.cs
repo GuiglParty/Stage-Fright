@@ -48,7 +48,7 @@ public class WaypointTriggerDave : MonoBehaviour {
             if (neighbours.Count > 0)
             {
                 GameObject bestWaypointMatch = neighbours
-                    .Where(waypoint => Mathf.Abs(Vector3.Angle(playerTargetHeading, WaypointHeadingFromPlayer(player.nextWaypoint, waypoint))) < 90)
+                    .Where(waypoint => Mathf.Abs(Vector3.Angle(playerTargetHeading, WaypointHeadingFromPlayer(player.nextWaypoint, waypoint))) < 45)
                     .OrderBy(waypoint => Mathf.Abs(Vector3.Angle(playerTargetHeading, WaypointHeadingFromPlayer(player.nextWaypoint, waypoint))))
                     .FirstOrDefault();
                 if (bestWaypointMatch != null)
