@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class WaypointTriggerDirectional : MonoBehaviour {
 	public GameObject nextWaypointLeft;
@@ -50,7 +52,12 @@ public class WaypointTriggerDirectional : MonoBehaviour {
 			}
 			
 		} else if (other.tag == "Monster" && changeMonsterHeading) {
-			other.GetComponent<MonsterAI> ().changeHeadingDirectional (new GameObject[] { nextWaypointLeft, nextWaypointRight });
+			List<GameObject> directions = new List<GameObject>();
+			directions.Add(nextWaypointLeft);
+			directions.Add(nextWaypointMiddle);
+			directions.Add(nextWaypointRight);
+			other.GetComponent<MonsterAI> ().changeHeadingDirectional (directions);
+
 			changeMonsterHeading = false;
 		}
     }

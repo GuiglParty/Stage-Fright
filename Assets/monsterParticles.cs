@@ -3,7 +3,9 @@ using System.Collections;
 
 public class monsterParticles : MonoBehaviour {
 
-	public float twitchSpeed;
+	public float pullStrength;
+	public float coreRadius;
+	public float shellRadius;
 
 	private ParticleSystem m_system;
 	private ParticleSystem.Particle[] m_particles;
@@ -21,7 +23,18 @@ public class monsterParticles : MonoBehaviour {
 		int numParticlesAlive = m_system.GetParticles (m_particles);
 		for (int i=0; i < numParticlesAlive; i++) 
 		{
-			m_particles[i].velocity -= m_particles[i].position*twitchSpeed; 
+			ParticleSystem.Particle curParticle = m_particles[i];
+
+
+			Vector3 particleHeading = curParticle.position.normalized;
+			float dist = curParticle.position.magnitude;
+			curParticle.velocity -= (pullStrength/Mathf.Max(dist*dist,coreRadius*coreRadius)) *particleHeading*Time.deltaTime; 
+			if (curParticle.position.magnitude > shellRadius)
+			{
+				curParticle.lifetime = 0;
+			}
+
+			m_particles[i]=curParticle;
 		}
 		m_system.SetParticles (m_particles, numParticlesAlive);
 	}

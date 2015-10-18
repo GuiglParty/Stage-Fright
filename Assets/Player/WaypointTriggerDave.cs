@@ -48,7 +48,7 @@ public class WaypointTriggerDave : MonoBehaviour {
             if (neighbours.Count > 0)
             {
                 GameObject bestWaypointMatch = neighbours
-                    .Where(waypoint => Mathf.Abs(Vector3.Angle(playerTargetHeading, WaypointHeadingFromPlayer(player.nextWaypoint, waypoint))) < 90)
+                    .Where(waypoint => Mathf.Abs(Vector3.Angle(playerTargetHeading, WaypointHeadingFromPlayer(player.nextWaypoint, waypoint))) < 45)
                     .OrderBy(waypoint => Mathf.Abs(Vector3.Angle(playerTargetHeading, WaypointHeadingFromPlayer(player.nextWaypoint, waypoint))))
                     .FirstOrDefault();
                 if (bestWaypointMatch != null)
@@ -77,10 +77,18 @@ public class WaypointTriggerDave : MonoBehaviour {
         }
         else if (other.tag == "Monster" && changeMonsterHeading)
         {
-            other.GetComponent<MonsterAI>().changeHeadingDirectional(neighbours.ToArray());
+            other.GetComponent<MonsterAI>().changeHeadingDirectional(neighbours);
             changeMonsterHeading = false;
         }
     }
+
+	void OnTriggerExit(Collider other)
+	{
+		if (other.tag == "Monster") 
+		{
+			changeMonsterHeading = true;
+		}
+	}
 
     Vector3 WaypointHeadingFromPlayer(GameObject playerNextWaypoint, GameObject candidateWaypoint)
     {

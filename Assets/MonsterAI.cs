@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class MonsterAI : MonoBehaviour {
 
@@ -62,14 +64,15 @@ public class MonsterAI : MonoBehaviour {
 		lookingForPrey = false;
 	}
 
-	public void changeHeadingDirectional(GameObject[] waypoints) 
+	public void changeHeadingDirectional(List<GameObject> waypoints) 
 	{
+
 		if (canSeePrey)
 		{
 			//set the heading to backwards in case there's no non-null waypoints
 			Vector3 curHeading = heading*-1;
 			float curAngle = Vector3.Angle(curHeading, preyHeading);
-			for (int i=0; i<waypoints.Length; i++)
+			for (int i=0; i<waypoints.Count; i++)
 			{
 				if (waypoints[i]!=null)
 				{
@@ -85,8 +88,8 @@ public class MonsterAI : MonoBehaviour {
 		}
 		else 
 		{
-			int directionIndex = Random.Range (0, waypoints.Length);
-			for (int i=0; i<waypoints.Length; i=(i+1)%waypoints.Length)
+			int directionIndex = Random.Range (0, waypoints.Count);
+			for (int i=directionIndex; i<waypoints.Count; i=(i+1)%waypoints.Count)
 			{
 				if (waypoints[i]!=null)
 				{
@@ -102,6 +105,11 @@ public class MonsterAI : MonoBehaviour {
 	public void changeHeadingLinear(GameObject waypoint)
 	{
 		heading = (waypoint.transform.position - transform.position).normalized;
+	}
+
+	public void changeHeading(Vector3 newHeading)
+	{
+		heading = newHeading.normalized;
 	}
 
 	// Update is called once per frame
