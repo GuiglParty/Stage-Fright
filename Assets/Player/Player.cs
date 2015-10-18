@@ -158,7 +158,7 @@ public class Player : MonoBehaviour {
 
     public void stopLookingAround()
     {
-        if (_ps == PlayerState.lookingAround)
+        if (_ps == PlayerState.lookingAround && !Input.GetButton("Jump"))
         {
             _ps = PlayerState.walking;
         }
