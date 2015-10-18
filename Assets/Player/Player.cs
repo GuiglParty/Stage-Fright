@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Player : MonoBehaviour {
+    public bool hiding = false;
     public float walkSpeed = 5f; // Units moved per second, when running at full speed
 	public float turnSpeed = 0.5f; // How quickly the view will spin when walking normally
 	public GameObject nextWaypoint; // the next position that the player will move towards when walking
@@ -38,7 +39,17 @@ public class Player : MonoBehaviour {
             birdsEye.enabled = !birdsEye.enabled;
         }
 
-		if (Input.GetButtonDown("Fire1") && firstPerson.enabled) { // Move only when not viewing map
+        if (Input.GetButtonDown("Jump"))
+        {
+            _ps = PlayerState.lookingAround;
+        }
+
+        if (Input.GetButtonUp("Jump"))
+        {
+            _ps = PlayerState.walking;
+        }
+
+        if (Input.GetButtonDown("Fire1") && firstPerson.enabled) { // Move only when not viewing map
 			_stepForce = 1.0f;
 			_pws = PlayerWalkState.forward;
 		}
@@ -141,6 +152,7 @@ public class Player : MonoBehaviour {
 public enum PlayerState {
 	walking, // Default state for when the player has control
 	cutScene,
+    lookingAround,
 	paused, // no input can be issued
 	other
 }
