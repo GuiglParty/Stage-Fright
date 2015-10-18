@@ -36,6 +36,8 @@ public class MonsterAI : MonoBehaviour {
 	// how long after losing the prey until the monster deactivates
 	public float lostPreyDuration;
 
+	public float catchDistance;
+
 	private float lostPreyWaitTime;
 
 	// whether the monster is actively looking for the player or waiting to teleport in
@@ -57,16 +59,21 @@ public class MonsterAI : MonoBehaviour {
 	private float waitTime;
 	private Vector3 teleportDest; 
 
+	private bool caughtPlayer;
+	private float caughtPlayerWait;
+
+	public float deathDelay;
+
 	// Use this for initialization
 	void Start () {
 		deactivateMonster ();
 		canSeePrey = false;
 		lookingForPrey = false;
+		caughtPlayer = false;
 	}
 
 	public void changeHeadingDirectional(List<GameObject> waypoints) 
 	{
-
 		if (canSeePrey)
 		{
 			//set the heading to backwards in case there's no non-null waypoints
@@ -112,18 +119,19 @@ public class MonsterAI : MonoBehaviour {
 		heading = newHeading.normalized;
 	}
 
-	void OnCollisionEnter(Collider other)
-	{
-		if (other.tag == "Player") 
-		{
-			//do scary death things
-		}
-	}
-
 	// Update is called once per frame
 	void Update () 
 	{
-		if (monsterActive) 
+		if (caughtPlayer) 
+		{
+			transform.position = prey.transform.position;
+			if (Time.time > caughtPlayerWait)
+			{
+				Application.LoadLevel(Application.loadedLevel);
+				
+			}
+		}
+		else if (monsterActive) 
 		{
 			//Within range of the prey, don't teleport
 			if (Vector3.Distance (transform.position, prey.transform.position) <= maxTeleportDistance) 
@@ -142,6 +150,12 @@ public class MonsterAI : MonoBehaviour {
 						//speed up to max speed
 						actualSpeed = Mathf.Min(maxSpeed, actualSpeed + acceleration * Time.deltaTime);
 						transform.Translate(heading * actualSpeed * Time.deltaTime);
+
+						if (preyDirection.magnitude < catchDistance)
+						{
+							caughtPlayer = true;
+							caughtPlayerWait = Time.time + deathDelay;
+						}
 					}
 					
 					// no line of sight to prey
