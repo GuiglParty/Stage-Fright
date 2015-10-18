@@ -112,7 +112,15 @@ public class Player : MonoBehaviour {
 
     public void lookAround()
     {
+        _ps = PlayerState.lookingAround;
+    }
 
+    public void stopLookingAround()
+    {
+        if (_ps == PlayerState.lookingAround)
+        {
+            _ps = PlayerState.walking;
+        }
     }
 
     // 180 turn
