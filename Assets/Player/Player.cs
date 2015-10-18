@@ -10,7 +10,7 @@ public class Player : MonoBehaviour {
     public Camera firstPerson; // Used to navigate game
     public Camera birdsEye; // Used when viewing map
 
-    GameObject _lastWaypoint; // the previous position that the player moved towards
+    public GameObject lastWaypoint; // the previous position that the player moved towards
 	GameObject _intermediateWaypoint; // used to make movement more smooth and consistant
 	PlayerState _ps;
 	PlayerWalkState _pws;
@@ -23,7 +23,7 @@ public class Player : MonoBehaviour {
 		_pws = PlayerWalkState.forward;
 		_stepForce = 1.0f;
 		
-		_lastWaypoint = nextWaypoint;
+		lastWaypoint = nextWaypoint;
 		_intermediateWaypoint = null;
 
         firstPerson.enabled = true;
@@ -107,7 +107,7 @@ public class Player : MonoBehaviour {
     // 180 turn
     public void turnAround()
     {
-		GameObject temp = _lastWaypoint;
+		GameObject temp = lastWaypoint;
 		nextWaypoint = temp;
     }
 	
@@ -124,7 +124,7 @@ public class Player : MonoBehaviour {
 	public void setWaypoint( GameObject Waypoint ) {
         if (Waypoint != nextWaypoint)
         {
-            _lastWaypoint = nextWaypoint;
+            lastWaypoint = nextWaypoint;
             _intermediateWaypoint = nextWaypoint;
             nextWaypoint = Waypoint;
         }
