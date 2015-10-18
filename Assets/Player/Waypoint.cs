@@ -5,7 +5,7 @@ public class Waypoint : MonoBehaviour {
 	GameObject player;
 	
 	public List<GameObject> triggers; // the movement triggers associated with this object
-	public float resetDistance = 5; // how far the player needs to be from the waypoint to re-enable the triggers
+	public float resetDistance = 22; // how far the player needs to be from the waypoint to re-enable the triggers
 	
 	// Use this for initialization
 	void Start () {
@@ -29,6 +29,12 @@ public class Waypoint : MonoBehaviour {
 			foreach( GameObject trigger in triggers ) {
 				trigger.GetComponent<Collider>().enabled = true;
 			}
+		}
+	}
+	
+	public void disableTriggers () {
+		foreach( GameObject trigger in triggers ) {
+			trigger.GetComponent<Collider>().enabled = false;
 		}
 	}
 }
