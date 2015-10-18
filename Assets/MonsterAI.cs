@@ -107,6 +107,11 @@ public class MonsterAI : MonoBehaviour {
 		heading = (waypoint.transform.position - transform.position).normalized;
 	}
 
+	public void changeHeading(Vector3 newHeading)
+	{
+		heading = newHeading.normalized;
+	}
+
 	// Update is called once per frame
 	void Update () 
 	{
