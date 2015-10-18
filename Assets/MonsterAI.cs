@@ -52,7 +52,7 @@ public class MonsterAI : MonoBehaviour {
 	private RaycastHit sightLineHit;
 	private Ray sightLine;
 	private float actualSpeed;
-	private bool canSeePrey;
+	public bool canSeePrey;
 	private bool lookingForPrey;
 	private Vector3 preyHeading;
 
