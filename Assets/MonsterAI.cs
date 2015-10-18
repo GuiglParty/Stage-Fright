@@ -52,29 +52,39 @@ public class MonsterAI : MonoBehaviour {
 		canSeePrey = false;
 	}
 
-	public void changeHeadingDirectional(GameObject waypointLeft, GameObject waypointRight) 
+	public void changeHeadingDirectional(GameObject[] waypoints) 
 	{
-		Vector3 headingLeft = (waypointLeft.transform.position - transform.position).normalized;
-		Vector3 headingRight = (waypointRight.transform.position - transform.position).normalized;
-
 		if (canSeePrey)
 		{
-			float differenceLeft = (preyHeading - headingLeft).magnitude;
-			float differenceRight = (preyHeading - headingRight).magnitude;
-			if (differenceLeft < differenceRight)
+			//set the heading to backwards in case there's no non-null waypoints
+			Vector3 curHeading = heading*-1;
+			float curAngle = Vector3.Angle(curHeading, preyHeading);
+			for (int i=0; i<4; i++)
 			{
-				heading = headingLeft;
+				if (waypoints[i]!=null)
+				{
+					Vector3 waypointHeading = (waypoints[i].GetComponent<WaypointTriggerDirectional>().transform.position - transform.position).normalized;
+					float angle = Vector3.Angle(waypointHeading, preyHeading);
+					if (angle < curAngle)
+					{
+						curHeading = waypointHeading;
+					}
+				}
 			}
-			else 
-			{
-				heading = headingRight;
-			}
+			heading = curHeading;
 		}
 		else 
 		{
-			int takeLeft = Random.Range (0, 2);
-			if (takeLeft == 1) heading = headingLeft;
-			else heading = headingRight;
+			int directionIndex = Random.Range (0, 4);
+			for (int i=0; i<4; i=(i+1)%4)
+			{
+				if (waypoints[i]!=null)
+				{
+					Vector3 waypointHeading = (waypoints[i].GetComponent<WaypointTriggerDirectional>().transform.position - transform.position).normalized;
+					heading = waypointHeading;
+					break;
+				}
+			}
 		}
 	
 	}
@@ -93,6 +103,7 @@ public class MonsterAI : MonoBehaviour {
 			if (Vector3.Distance (transform.position, prey.transform.position) <= maxTeleportDistance) 
 			{
 				Vector3 preyDirection = prey.transform.position - transform.position;
+				preyHeading = preyDirection.normalized;
 				//try to get a line of sight
 				if (Physics.Raycast(transform.position, preyDirection, out sightLineHit, sightLineRange)) 
 				{
@@ -101,7 +112,6 @@ public class MonsterAI : MonoBehaviour {
 					if (sightLineHit.transform == prey.transform) 
 					{
 						//Debug.Log("has line of sight to prey");
-						preyHeading = preyDirection.normalized;
 						canSeePrey = true;
 						//speed up to max speed
 						actualSpeed = Mathf.Min(maxSpeed, actualSpeed + acceleration * Time.deltaTime);
