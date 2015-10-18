@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/StageFrightMusic/wind.flp.meta
 guid: 52843b969c4cf9049a1fb6cc4be9e420
 timeCreated: 1445128286
+=======
+guid: f500dbb926f0bcb4c9aee5405bb7c67b
+timeCreated: 1445127509
+>>>>>>> c10d8ea3a7dfaca68e28c247dc95745da8a97bc4:Assets/StageFrightMusic/wind.flp.meta
 licenseType: Free
 DefaultImporter:
   userData: 

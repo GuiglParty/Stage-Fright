@@ -31,7 +31,7 @@ public class WaypointTriggerDirectional : MonoBehaviour {
 				} else {
 					other.GetComponent<Player> ().setWaypointFront (nextWaypointLeft);
 				}
-				this.GetComponent<Collider> ().enabled = false;
+				this.transform.parent.GetComponent<Waypoint>().disableTriggers();
 				mapShadow.GetComponent<Renderer> ().enabled = false; // Hide the shadow on the map view
 			} else 
 			if (other.GetComponent<Player> ().getWalkState () == PlayerWalkState.right && nextWaypointRight != null) {
@@ -40,7 +40,7 @@ public class WaypointTriggerDirectional : MonoBehaviour {
 				} else {
 					other.GetComponent<Player> ().setWaypointFront (nextWaypointRight);
 				}
-				this.GetComponent<Collider> ().enabled = false;
+				this.transform.parent.GetComponent<Waypoint>().disableTriggers();
 				mapShadow.GetComponent<Renderer> ().enabled = false; // Hide the shadow on the map view
 			} else 
 			if (_setMiddleWaypoint == false && other.GetComponent<Player> ().getWalkState () == PlayerWalkState.forward && nextWaypointMiddle != null){
@@ -58,6 +58,9 @@ public class WaypointTriggerDirectional : MonoBehaviour {
 	void OnTriggerExit(Collider other) {
 		if (other.tag == "Monster") {
 			changeMonsterHeading = true;
+		} else
+		if (other.tag == "Player") {
+			this.transform.parent.GetComponent<Waypoint>().disableTriggers();
 		}
 	}
 }
