@@ -6,6 +6,7 @@ public class DeadEndScript : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		this.GetComponent<Renderer> ().enabled = false;
 		this.GetComponent<Collider>().enabled = true;
 		changeMonsterHeading = true;
 	}
