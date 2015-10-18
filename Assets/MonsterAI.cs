@@ -24,9 +24,17 @@ public class MonsterAI : MonoBehaviour {
 	// the fastest the monster can go
 	public float maxSpeed;
 
+	//how wide the monster can see
+	public float visionAngle;
+
 	// how long to wait before teleporting in
 	public float minWaitDuration;
 	public float maxWaitDuration;
+
+	// how long after losing the prey until the monster deactivates
+	public float lostPreyDuration;
+
+	private float lostPreyWaitTime;
 
 	// whether the monster is actively looking for the player or waiting to teleport in
 	private bool monsterActive;
@@ -41,6 +49,7 @@ public class MonsterAI : MonoBehaviour {
 	private Ray sightLine;
 	private float actualSpeed;
 	private bool canSeePrey;
+	private bool lookingForPrey;
 	private Vector3 preyHeading;
 
 	private float waitTime;
@@ -50,6 +59,7 @@ public class MonsterAI : MonoBehaviour {
 	void Start () {
 		deactivateMonster ();
 		canSeePrey = false;
+		lookingForPrey = false;
 	}
 
 	public void changeHeadingDirectional(GameObject[] waypoints) 
@@ -59,11 +69,11 @@ public class MonsterAI : MonoBehaviour {
 			//set the heading to backwards in case there's no non-null waypoints
 			Vector3 curHeading = heading*-1;
 			float curAngle = Vector3.Angle(curHeading, preyHeading);
-			for (int i=0; i<4; i++)
+			for (int i=0; i<waypoints.Length; i++)
 			{
 				if (waypoints[i]!=null)
 				{
-					Vector3 waypointHeading = (waypoints[i].GetComponent<WaypointTriggerDirectional>().transform.position - transform.position).normalized;
+					Vector3 waypointHeading = (waypoints[i].transform.position - transform.position).normalized;
 					float angle = Vector3.Angle(waypointHeading, preyHeading);
 					if (angle < curAngle)
 					{
@@ -75,12 +85,12 @@ public class MonsterAI : MonoBehaviour {
 		}
 		else 
 		{
-			int directionIndex = Random.Range (0, 4);
-			for (int i=0; i<4; i=(i+1)%4)
+			int directionIndex = Random.Range (0, waypoints.Length);
+			for (int i=0; i<waypoints.Length; i=(i+1)%waypoints.Length)
 			{
 				if (waypoints[i]!=null)
 				{
-					Vector3 waypointHeading = (waypoints[i].GetComponent<WaypointTriggerDirectional>().transform.position - transform.position).normalized;
+					Vector3 waypointHeading = (waypoints[i].transform.position - transform.position).normalized;
 					heading = waypointHeading;
 					break;
 				}
@@ -109,7 +119,7 @@ public class MonsterAI : MonoBehaviour {
 				{
 					//Debug.Log("has line of sight");
 					// Line of sight to prey established
-					if (sightLineHit.transform == prey.transform) 
+					if (sightLineHit.transform == prey.transform && Vector3.Angle(heading,preyHeading) < visionAngle/2) 
 					{
 						//Debug.Log("has line of sight to prey");
 						canSeePrey = true;
@@ -120,10 +130,25 @@ public class MonsterAI : MonoBehaviour {
 					
 					// no line of sight to prey
 					else {
-						//slow down until it reaches default speed
+
+						// lost line of sight to the prey
+						if (canSeePrey)
+						{
+							lostPreyWaitTime = Time.time + lostPreyDuration;
+							lookingForPrey = true;
+						}
+
 						canSeePrey = false;
+
+						//slow down until it reaches default speed
 						actualSpeed = Mathf.Max(startSpeed, actualSpeed - deceleration * Time.deltaTime);
 						transform.Translate(heading * actualSpeed * Time.deltaTime);
+
+						if (lookingForPrey && Time.time >= lostPreyWaitTime)
+						{
+							deactivateMonster();
+						}
+					
 					}
 				}
 			} 
@@ -157,5 +182,7 @@ public class MonsterAI : MonoBehaviour {
 		transform.position = teleportDest;
 		heading = (prey.GetComponent<Player>().nextWaypoint.transform.position - transform.position).normalized;
 		monsterActive = true;
+		canSeePrey = false;
+		lookingForPrey = false;
 	}
 }
