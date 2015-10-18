@@ -57,6 +57,7 @@ public class WaypointTriggerDirectional : MonoBehaviour {
 			directions.Add(nextWaypointMiddle);
 			directions.Add(nextWaypointRight);
 			other.GetComponent<MonsterAI> ().changeHeadingDirectional (directions);
+
 			changeMonsterHeading = false;
 		}
     }

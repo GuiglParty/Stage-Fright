@@ -23,7 +23,7 @@ public class Player : MonoBehaviour {
 		_pws = PlayerWalkState.forward;
 		_stepForce = 1.0f;
 		
-		lastWaypoint = nextWaypoint;
+		//lastWaypoint = nextWaypoint;
 		_intermediateWaypoint = null;
 
         firstPerson.enabled = true;
@@ -108,6 +108,7 @@ public class Player : MonoBehaviour {
     public void turnAround()
     {
 		GameObject temp = lastWaypoint;
+        lastWaypoint = nextWaypoint;
 		nextWaypoint = temp;
     }
 	

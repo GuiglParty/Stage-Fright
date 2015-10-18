@@ -45,30 +45,34 @@ public class WaypointTriggerDave : MonoBehaviour {
                 default:
                     break;
             }
-            GameObject bestWaypointMatch = neighbours
-                .Where(waypoint => Mathf.Abs(Vector3.Angle(playerTargetHeading, WaypointHeadingFromPlayer(player.nextWaypoint, waypoint))) < 90)
-                .OrderBy(waypoint => Mathf.Abs(Vector3.Angle(playerTargetHeading, WaypointHeadingFromPlayer(player.nextWaypoint, waypoint))))
-                .FirstOrDefault();
-            if (bestWaypointMatch != null)
+            if (neighbours.Count > 0)
             {
-                if (!_setMiddleWaypoint)
+                GameObject bestWaypointMatch = neighbours
+                    .Where(waypoint => Mathf.Abs(Vector3.Angle(playerTargetHeading, WaypointHeadingFromPlayer(player.nextWaypoint, waypoint))) < 90)
+                    .OrderBy(waypoint => Mathf.Abs(Vector3.Angle(playerTargetHeading, WaypointHeadingFromPlayer(player.nextWaypoint, waypoint))))
+                    .FirstOrDefault();
+                if (bestWaypointMatch != null)
                 {
-                    if (player.getWalkState() == PlayerWalkState.forward)
+                    if (!_setMiddleWaypoint)
                     {
-                        player.setWaypoint(bestWaypointMatch);
-                        _setMiddleWaypoint = true;
+                        if (player.getWalkState() == PlayerWalkState.forward)
+                        {
+                            player.setWaypoint(bestWaypointMatch);
+                            _setMiddleWaypoint = true;
+                        }
+                        else
+                        {
+                            player.setWaypointFront(bestWaypointMatch);
+                            this.transform.parent.GetComponent<Waypoint>().disableTriggers();
+                        }
                     }
                     else
                     {
-                        player.setWaypointFront(bestWaypointMatch);
+                        player.setWaypoint(bestWaypointMatch);
+                        this.transform.parent.GetComponent<Waypoint>().disableTriggers();
                     }
+                    mapShadow.GetComponent<Renderer>().enabled = false; // Hide the shadow on the map view
                 }
-                else
-                {
-                    player.setWaypoint(bestWaypointMatch);
-                }
-                this.GetComponent<Collider>().enabled = false;
-                mapShadow.GetComponent<Renderer>().enabled = false; // Hide the shadow on the map view
             }
         }
         else if (other.tag == "Monster" && changeMonsterHeading)
@@ -77,6 +81,14 @@ public class WaypointTriggerDave : MonoBehaviour {
             changeMonsterHeading = false;
         }
     }
+
+	void OnTriggerExit(Collider other)
+	{
+		if (other.tag == "Monster") 
+		{
+			changeMonsterHeading = true;
+		}
+	}
 
     Vector3 WaypointHeadingFromPlayer(GameObject playerNextWaypoint, GameObject candidateWaypoint)
     {
