@@ -27,13 +27,12 @@ public class HidingSpotTrigger : MonoBehaviour {
 
             if (player.getPlayerState() == PlayerState.lookingAround)
             {
-                if (!spot.GetOccupied())
+                if (!spot.GetOccupied() && !player.wasHiding)
                 {
                     spot.SetReturnPosition(player.transform.position);
                     spot.SetReturnRotation(player.transform.rotation);
                     spot.SetOccupied(true);
-                    player.transform.position = spot.transform.position;
-                    player.transform.rotation = spot.transform.rotation;
+                    player.hidingSpot = hidingSpot;
                     player.hiding = true;
                 }
             }
@@ -41,10 +40,9 @@ public class HidingSpotTrigger : MonoBehaviour {
             {
                 if (spot.GetOccupied())
                 {
-                    player.transform.position = spot.GetReturnPosition();
-                    player.transform.rotation = spot.GetReturnRotation();
                     spot.SetOccupied(false);
                     player.hiding = false;
+                    player.wasHiding = true;
                 }
             }
         }
