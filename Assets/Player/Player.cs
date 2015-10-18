@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -153,7 +153,15 @@ public class Player : MonoBehaviour {
 
     public void lookAround()
     {
+        _ps = PlayerState.lookingAround;
+    }
 
+    public void stopLookingAround()
+    {
+        if (_ps == PlayerState.lookingAround)
+        {
+            _ps = PlayerState.walking;
+        }
     }
 
     // 180 turn
@@ -200,8 +208,8 @@ public enum PlayerState {
 
 // Used to determine the direction the player is walking when approaching a new waypoint
 public enum PlayerWalkState {
-	standing,
-	left,
-	right,
-	forward
+    standing,
+    left,
+    right,
+    forward
 }

@@ -18,6 +18,7 @@ public class InputParser : MonoBehaviour
 
     private bool _lastFrameWasRoot = false;
     private bool _lastInputWasChordComplete = false;
+    private bool _justTurnedAround = false;
 
     // midi min = 0
     // midi max = 127
@@ -49,7 +50,6 @@ public class InputParser : MonoBehaviour
         {
             if (MidiMaster.GetKeyDown(i))
             {
-                //print("key " + i + " pressed");
                 audioScript.PlayNote(i, MidiMaster.GetKey(i));
             }
             else if (MidiMaster.GetKeyUp(i))
@@ -80,6 +80,7 @@ public class InputParser : MonoBehaviour
         {
             if (MidiMaster.GetKey(i) > 0) // should repeatedly trigger on hold
             {
+                print("bottom note " + i + " entered");
                 newLookNotes.Add(new Note
                 {
                     Value = i,
@@ -87,7 +88,6 @@ public class InputParser : MonoBehaviour
                 });
             }
         }
-
 
         List<Note> newWalkingNotes = new List<Note>();
 
@@ -103,17 +103,35 @@ public class InputParser : MonoBehaviour
                 });
             }
         }
-        
-        // process notes
 
+        // process notes
+        print("sting notes count: " + newStingNotes.Count);
+        print("look notes count: " + newLookNotes.Count);
         // 180 sting takes priority over looking
         if (newStingNotes.Count > 3)
         {
-            playerScript.turnAround();
+            if (!_justTurnedAround)
+            {
+                playerScript.turnAround();
+                _justTurnedAround = true;
+            }
         }
-        else if (newLookNotes.Count > 3)
+        else
         {
+            _justTurnedAround = false;
+        }
+
+        if (newLookNotes.Count > 3)
+        {
+            print("look around notes pressed");
             playerScript.lookAround();
+        }
+        else
+        {
+            if (playerScript.getPlayerState() == PlayerState.lookingAround)
+            {
+                playerScript.stopLookingAround();
+            }
         }
 
         // can keep running while looking/turning around
