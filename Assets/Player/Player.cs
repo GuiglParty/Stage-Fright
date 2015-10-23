@@ -48,7 +48,7 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.X)) // Hide
         {
-            
+            _ps = PlayerState.lookingAround;
         }
 
         if (Input.GetButtonDown("Jump"))

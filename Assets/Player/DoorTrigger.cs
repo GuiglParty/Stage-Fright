@@ -5,7 +5,7 @@ public class DoorTrigger : MonoBehaviour {
     GameObject player;
 
     public float finalRotation; // Within (-90, 90)
-    int test = 0;
+    int rotated = 0;
 
     // Use this for initialization
     void Start () {
@@ -23,14 +23,14 @@ public class DoorTrigger : MonoBehaviour {
         // if player is close enough, open the door. Never close it
         if (distance <= 5)
         {
-            if (finalRotation > 0 && yRotate < finalRotation) // 1 to 90
+            if (rotated < finalRotation) // 1 to 90
             {
                 this.transform.Rotate(0f, 1f, 0f, Space.World);
-            } else if(finalRotation < 0 && yRotate > finalRotation) // -1 to -90
+                rotated++;
+            } else if(finalRotation < rotated) // -1 to -90
             {
                 this.transform.Rotate(0f, -1f, 0f, Space.World);
-            } else
-            {
+                rotated--;
             }
         }
     }
